@@ -273,7 +273,10 @@ namespace UnityEngine.Rendering.Universal
 
             // Assign the camera color target early in case it is needed during AddRenderPasses.
             bool isPreviewCamera = cameraData.isPreviewCamera;
-            var createColorTexture = rendererFeatures.Count != 0 && !isPreviewCamera;
+
+			// FFR Fix
+			// var createColorTexture = rendererFeatures.Count != 0 && !isPreviewCamera;
+			var createColorTexture = !isPreviewCamera;
             if (createColorTexture)
             {
                 m_ActiveCameraColorAttachment = m_CameraColorAttachment;
@@ -348,6 +351,9 @@ namespace UnityEngine.Rendering.Universal
                 createColorTexture |= createDepthTexture;
             }
 #endif
+
+			// FFR Fix
+			createColorTexture = createDepthTexture = false;
 
             // Configure all settings require to start a new camera stack (base camera only)
             if (cameraData.renderType == CameraRenderType.Base)
